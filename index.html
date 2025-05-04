@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verde   </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --black: #000000;
+            --white: #ffffff;
+            --gray: #f5f5f5;
+            --dark-gray: #333333;
+            --primary: #00ff00;
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background-color: var(--white);
+            color: var(--black);
+            overflow-x: hidden;
+        }
+        
+        /* Header Styles */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: var(--white);
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 24px;
+        }
+        
+        .nav-container {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 30px;
+            position: relative;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--black);
+            font-weight: 500;
+            font-size: 14px;
+            letter-spacing: -0.3px;
+            transition: var(--transition);
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: var(--white);
+            min-width: 200px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+        
+        .nav-links li:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .dropdown-menu a {
+            display: block;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        /* Search Bar */
+        .search-container {
+            position: relative;
+            width: 200px;
+        }
+        
+        .search-container input {
+            width: 100%;
+            padding: 10px 15px;
+            padding-right: 40px;
+            border: 1px solid #ddd;
+            border-radius: 50px;
+            font-size: 14px;
+        }
+        
+        .search-container button {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--black);
+        }
+        
+        /* Cart Icon */
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--primary);
+            color: var(--black);
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        /* Products Section */
+        .products-section {
+            padding: 150px 5% 100px;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .section-title h2 {
+            font-size: 48px;
+            font-weight: 700;
+            letter-spacing: -1.5px;
+            margin-bottom: 15px;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .product-card {
+            background-color: var(--gray);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .product-image {
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+        }
+        
+        .product-image img {
+            max-width: 100%;
+            max-height: 100%;
+            transition: var(--transition);
+        }
+        
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+        
+        .product-badge {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: var(--primary);
+            color: var(--black);
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .product-content {
+            padding: 20px;
+        }
+        
+        .product-content h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .product-content p {
+            color: var(--dark-gray);
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        
+        .product-price {
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        
+        .add-to-cart {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--black);
+            color: var(--white);
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .add-to-cart:hover {
+            background-color: var(--primary);
+            color: var(--black);
+        }
+        
+        /* Cart Modal */
+        .cart-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            max-width: 400px;
+            height: 100vh;
+            background-color: var(--white);
+            z-index: 1001;
+            box-shadow: -5px 0 30px rgba(0,0,0,0.1);
+            padding: 30px;
+            overflow-y: auto;
+        }
+        
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .close-cart {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        #cart-items {
+            margin-bottom: 30px;
+        }
+        
+        .cart-item {
+            display: flex;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .cart-item-img {
+            width: 80px;
+            height: 80px;
+            margin-right: 15px;
+        }
+        
+        .cart-item-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        .cart-item-details {
+            flex: 1;
+        }
+        
+        .cart-item-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .cart-item-price {
+            color: var(--dark-gray);
+            margin-bottom: 10px;
+        }
+        
+        .cart-item-actions {
+            display: flex;
+            align-items: center;
+        }
+        
+        .quantity-btn {
+            width: 25px;
+            height: 25px;
+            border: 1px solid #ddd;
+            background: none;
+            cursor: pointer;
+        }
+        
+        .quantity-input {
+            width: 40px;
+            text-align: center;
+            border: none;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            padding: 5px;
+        }
+        
+        .remove-item {
+            margin-left: 15px;
+            color: #ff0000;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        
+        .cart-total {
+            font-weight: 700;
+            font-size: 18px;
+            text-align: right;
+            margin: 20px 0;
+        }
+        
+        .whatsapp-order-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: #25D366;
+            color: var(--white);
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .whatsapp-order-btn:hover {
+            background-color: #128C7E;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .search-container {
+                display: none;
+            }
+            
+            .products-section {
+                padding-top: 120px;
+            }
+            
+            .section-title h2 {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <img src="https://in.Verde   .tech/cdn/shop/files/Verde   _Logo_Black_300x.png" alt="Verde    Logo">
+        </div>
+        
+        <div class="nav-container">
+            <ul class="nav-links">
+                <li>
+                    <a href="#">Products</a>
+                    <div class="dropdown-menu">
+                        <a href="#">Phone (2)</a>
+                        <a href="#">Phone (1)</a>
+                        <a href="#">Ear (2)</a>
+                        <a href="#">Ear (1)</a>
+                    </div>
+                </li>
+                <li><a href="#">Store</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Support</a></li>
+                <li><a href="#">Community</a></li>
+            </ul>
+            
+            <div class="search-container">
+                <input type="text" placeholder="Search products...">
+                <button type="submit"><i class="fas fa-search"></i></button>
+            </div>
+            
+            <div class="cart-icon" id="cart-icon">
+                <i class="fas fa-shopping-bag"></i>
+                <span class="cart-count" id="cart-count">0</span>
+            </div>
+        </div>
+        
+        <button class="mobile-menu-btn">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <!-- Products Section -->
+    <section class="products-section">
+        <div class="section-title">
+            <h2>Our Products</h2>
+        </div>
+        
+        <div class="products-grid">
+            <!-- Phone (2) -->
+            <div class="product-card" data-id="1">
+                <div class="product-image">
+                    <img src="https://in.Verde   .tech/cdn/shop/files/Verde   _Phone_2_Black_1_600x.png" alt="Phone (2)">
+                </div>
+                <div class="product-content">
+                    <h3>Phone (2m)</h3>
+                    <p>The next generation Verde    phone with Glyph Interface</p>
+                    <div class="product-price">₹44,999</div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+            
+            <!-- Phone (1) -->
+            <div class="product-card" data-id="2">
+                <div class="product-image">
+                    <img src="https://in.Verde   .tech/cdn/shop/files/Verde   _Phone_1_Black_1_600x.png" alt="Phone (1)">
+                </div>
+                <div class="product-content">
+                    <h3>Phone (1m)</h3>
+                    <p>The original Verde    smartphone with iconic design</p>
+                    <div class="product-price">₹32,999</div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+            
+            <!-- Ear (2) -->
+            <div class="product-card" data-id="3">
+                <span class="product-badge">Best Seller</span>
+                <div class="product-image">
+                    <img src="https://in.Verde   .tech/cdn/shop/files/Verde   _Ear_2_Black_1_600x.png" alt="Ear (2)">
+                </div>
+                <div class="product-content">
+                    <h3>Ear (2m)</h3>
+                    <p>Premium wireless earbuds with crystal clear sound</p>
+                    <div class="product-price">₹9,999</div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Modal -->
+    <div class="cart-modal" id="cart-modal">
+        <div class="cart-header">
+            <h3>Your Cart</h3>
+            <button class="close-cart" id="close-cart">&times;</button>
+        </div>
+        
+        <div id="cart-items">
+            <!-- Cart items will be added here dynamically -->
+            <p id="empty-cart-message">Your cart is empty</p>
+        </div>
+        
+        <div class="cart-total">
+            Total: ₹<span id="cart-total-amount">0</span>
+        </div>
+        
+        <button class="whatsapp-order-btn" id="whatsapp-order-btn">
+            <i class="fab fa-whatsapp"></i> Order via WhatsApp
+        </button>
+    </div>
+
+    <script>
+        // Shopping Cart Functionality
+        let cart = [];
+        
+        // DOM Elements
+        const cartIcon = document.getElementById('cart-icon');
+        const cartModal = document.getElementById('cart-modal');
+        const closeCart = document.getElementById('close-cart');
+        const cartItemsContainer = document.getElementById('cart-items');
+        const emptyCartMessage = document.getElementById('empty-cart-message');
+        const cartCount = document.getElementById('cart-count');
+        const cartTotalAmount = document.getElementById('cart-total-amount');
+        const addToCartButtons = document.querySelectorAll('.add-to-cart');
+        const whatsappOrderBtn = document.getElementById('whatsapp-order-btn');
+        const searchInput = document.querySelector('.search-container input');
+        const searchButton = document.querySelector('.search-container button');
+        const products = document.querySelectorAll('.product-card');
+        
+        // Toggle Cart Modal
+        cartIcon.addEventListener('click', () => {
+            cartModal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        });
+        
+        closeCart.addEventListener('click', () => {
+            cartModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+        
+        // Close cart when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === cartModal) {
+                cartModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+        // Add to Cart Functionality
+        function addToCart(productId, productName, productPrice, productImage) {
+            const existingItem = cart.find(item => item.id === productId);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: productId,
+                    name: productName,
+                    price: productPrice,
+                    image: productImage,
+                    quantity: 1
+                });
+            }
+            
+            updateCart();
+        }
+        
+        // Update Cart Display
+        function updateCart() {
+            // Update cart count
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            cartCount.textContent = totalItems;
+            
+            // Update cart items
+            cartItemsContainer.innerHTML = '';
+            
+            if (cart.length === 0) {
+                emptyCartMessage.style.display = 'block';
+                cartTotalAmount.textContent = '0';
+                whatsappOrderBtn.style.display = 'none';
+                return;
+            }
+            
+            emptyCartMessage.style.display = 'none';
+            whatsappOrderBtn.style.display = 'flex';
+            
+            let totalAmount = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                totalAmount += itemTotal;
+                
+                const cartItem = document.createElement('div');
+                cartItem.className = 'cart-item';
+                cartItem.innerHTML = `
+                    <div class="cart-item-img">
+                        <img src="${item.image}" alt="${item.name}">
+                    </div>
+                    <div class="cart-item-details">
+                        <div class="cart-item-title">${item.name}</div>
+                        <div class="cart-item-price">₹${item.price}</div>
+                        <div class="cart-item-actions">
+                            <button class="quantity-btn minus" data-id="${item.id}">-</button>
+                            <input type="text" class="quantity-input" value="${item.quantity}" readonly>
+                            <button class="quantity-btn plus" data-id="${item.id}">+</button>
+                            <span class="remove-item" data-id="${item.id}">Remove</span>
+                        </div>
+                    </div>
+                `;
+                
+                cartItemsContainer.appendChild(cartItem);
+            });
+            
+            // Update total amount
+            cartTotalAmount.textContent = totalAmount;
+            
+            // Add event listeners to quantity buttons
+            document.querySelectorAll('.quantity-btn.minus').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.target.getAttribute('data-id');
+                    const item = cart.find(item => item.id === id);
+                    
+                    if (item.quantity > 1) {
+                        item.quantity -= 1;
+                    } else {
+                        cart = cart.filter(item => item.id !== id);
+                    }
+                    
+                    updateCart();
+                });
+            });
+            
+            document.querySelectorAll('.quantity-btn.plus').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.target.getAttribute('data-id');
+                    const item = cart.find(item => item.id === id);
+                    item.quantity += 1;
+                    updateCart();
+                });
+            });
+            
+            document.querySelectorAll('.remove-item').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.target.getAttribute('data-id');
+                    cart = cart.filter(item => item.id !== id);
+                    updateCart();
+                });
+            });
+        }
+        
+        // WhatsApp Order Functionality
+        whatsappOrderBtn.addEventListener('click', () => {
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+            
+            let message = "Hello Verde   ,\n\nI would like to place an order for:\n\n";
+            
+            cart.forEach((item, index) => {
+                message += `${index + 1}. ${item.name} (Qty: ${item.quantity}) - ₹${item.price * item.quantity}\n`;
+            });
+            
+            const totalAmount = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+            
+            message += `\nTotal Amount: ₹${totalAmount}\n\n`;
+            message += "My Details:\n";
+            message += "Name: \n";
+            message += "Address: \n";
+            message += "Phone: \n\n";
+            message += "Thank you for shopping with us!";
+            
+            const encodedMessage = encodeURIComponent(message);
+            window.open(`https://wa.me/9820967980?text=${encodedMessage}`, '_blank');
+            
+            // Clear cart after order
+            cart = [];
+            updateCart();
+            cartModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+        
+        // Add event listeners to Add to Cart buttons
+        document.querySelectorAll('.product-card').forEach(product => {
+            const addButton = product.querySelector('.add-to-cart');
+            const productId = product.getAttribute('data-id');
+            const productName = product.querySelector('h3').textContent;
+            const productPrice = parseInt(product.querySelector('.product-price').textContent.replace('₹', '').replace(',', ''));
+            const productImage = product.querySelector('.product-image img').src;
+            
+            addButton.addEventListener('click', () => {
+                addToCart(productId, productName, productPrice, productImage);
+                
+                // Visual feedback
+                addButton.textContent = 'Added!';
+                setTimeout(() => {
+                    addButton.textContent = 'Add to Cart';
+                }, 1000);
+            });
+        });
+        
+        // Search Functionality
+        function performSearch() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            
+            products.forEach(product => {
+                const productName = product.querySelector('h3').textContent.toLowerCase();
+                const productDesc = product.querySelector('p').textContent.toLowerCase();
+                
+                if (productName.includes(searchTerm) || productDesc.includes(searchTerm)) {
+                    product.style.display = 'block';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+        }
+        
+        searchButton.addEventListener('click', performSearch);
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+        
+        // Clear search when input is empty
+        searchInput.addEventListener('input', () => {
+            if (searchInput.value === '') {
+                products.forEach(product => {
+                    product.style.display = 'block';
+                });
+            }
+        });
+        
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        });
+        
+        // Initialize cart
+        updateCart();
+    </script>
+</body>
+</html>
